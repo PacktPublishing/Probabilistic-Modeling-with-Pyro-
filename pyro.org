@@ -75,7 +75,11 @@ And before moving on, some observations worth being emphasised:
 
 We have discussed what probability distributions are, but we still need to figure out how to actually construct them. As we have seen, the formal definition of a probability distribution is quite abstract: one space, one sigma-algebra, one mapping between sets to numbers, and two or three rather simplistic rules. This is in sharp contrast to all the different distributions we might or might not have heard of, and the innumerable rules and relations of probability that we might or might not understand. So how do we actually build all the probability distributions? How to understand the varying relationships between them? Based on how much information we have at hand, and how many assumptions we are willing to make, generally speaking we have several ways to define distributions, and we'll briefly introduce them here.
 
-In the simplest case, facing a certain quantity we are trying to model, all we have is a given space, and a sigma-algebra built on it, as defining a probability distribution would demand. We know the properties of that space, and that of the sigma algebra, but we know nothing about the quantity we are modelling. Cautious modellers as we are, when we know nothing, we assume nothing. In this case we can just assign equal probabilities everywhere, which leads us to uniform distributions. These are not very interesting distributions, and neither are they particularly useful to us, because when we want to model some quantity, we normally already have some ideas about it, no matter how vague these ideas might be. This leads us to the next scenario.
+However, most of the time we don't actually define probability distributions, but probability density functions, and there are big differences between the two, because a probability distribution is a mapping between the sets in the sigma algebra to real numbers between 0 and 1, as we have mentioned before; a probability density function, on the other hand, is a mapping between the points in the probability space to non-negative real numbers.
+
+So why this further complication? Well to actually make things easier. The probability spaces we often work with can have infinite number of points, with complex geometry, and their corresponding sigma algebras even more daunting. So instead of defining probability distributions directly on the sigma algebras, we define probability densities functions, which, when integrated over a set, gives us the probability of that given set. However, it's always important that the density functions themselves are not probabilities.
+
+With this technicality dealt with, we can finally think about constructing probability distributions on varying spaces. In the simplest case, facing a certain quantity we are trying to model, all we have is a given space, and a sigma-algebra built on it, as defining a probability distribution would demand. We know the properties of that space, and that of the sigma algebra, but we know nothing about the quantity we are modelling. Cautious modellers as we are, when we know nothing, we assume nothing. In this case we can just assign equal probabilities everywhere, which leads us to uniform distributions. These are not very interesting distributions, and neither are they particularly useful to us, because when we want to model some quantity, we normally already have some ideas about it, no matter how vague these ideas might be. This leads us to the next scenario.
 
 If, apart from the space and the sigma algebra, we also know some properties of the quantity we are modelling, then we might build some distributions that, by design, will meet these properties, while keeping the probability mass as normally distributed as possible. The properties under considerations normally include where the quantities concentrate, how spread out they are, and the principle we'll follow to build such distributions is called the principle of maximum entropy, which literally tries to maximise the uniformity of the distribution under the constraints of known properties. Of course, the distributions built this way might not be, in the end, what we want, because even though they match some properties of the quantity we are modelling, they might fail to satisfy some other properties. So after having chosen a distribution based on certain properties, it's always important to check whether we have introduced other undesired properties. As we'll see in the future, this is an important part of probabilistic modelling.
 
@@ -87,7 +91,7 @@ In the rest of the book we'll encounter many different distributions; each time 
 
 ** The genesis
 
-If we just have a given space where we want to define a distribution, and we want the probability distribution to be as uniform as possible, the first choice, obviously, is the uniform distribution: no matter what the space is and how many points it contains, just assign each point set (a set containing one and only one point) the same probability value. However this is neither very practical nor very useful: if we want every point to have the same probability we wouldn't even need to define the probability in the first place! So instead we'll usually also enforce some extra requirements, like the average value of the distribution, or its variation across the whole space, or some other related quantities derived thereof, and we then contrive a scheme so that we can maximise the uniformity while at the same time preserving these requirements. This "uniformity" in probabilities are measured by something called the entropy, which is why these distributions are called maximum entropy distributions.
+If we just have a given probability space, and a corresponding sigma algebra where we want to define a distribution, and we want the probability distribution to be as uniform as possible, the first choice, obviously, is the uniform distribution: no matter what the space is and how many points it contains, just assign each point set (a set containing one and only one point) the same probability value. However this is neither very practical nor very useful: if we want every point to have the same probability we wouldn't even need to define the probability in the first place! So instead we'll usually also enforce some extra requirements, like the average value of the distribution, or its variation across the whole space, or some other related quantities derived thereof, and we then contrive a scheme so that we can maximise the uniformity while at the same time preserving these requirements. This "uniformity" in probabilities are measured by something called the entropy, which is why these distributions are called maximum entropy distributions.
 
 Depending on whether the probability space is discrete or continuous, we also give the schemes for probability assignments different names: probability mass functions if the space is discrete, and probability density functions if continuous. Undoubtedly you have heard of these names somewhere already.
 
@@ -154,9 +158,6 @@ axs[1].set_title(r'$(1-p)^{k-1}$')
 axs[1].legend();
 #+END_SRC
 
-#+RESULTS: prob-beta-components
-[[file:./.ob-jupyter/ab35f78f172dfab7dfd8bde3b1feccdc21ee89fc.png]]
-
 Because the plots on the left are about $p$ while those on the right are about $1-p$ it's understandable they have opposite shapes.
 From the left plot, and together with a little knowledge about the exponential function, we see that
 
@@ -182,9 +183,6 @@ for i, (a, b) in enumerate(thetas):
     plt.xticks([0, 0.5, 1])
     plt.tight_layout()
 #+END_SRC
-
-#+RESULTS: prob-beta-densities
-[[file:./.ob-jupyter/0aae13c28cf1a61c6aea2748c0539892205b758b.png]]
 
 From first impression we can already see that the density function is capable of taking many quite different shapes, even though the two components seem innocent enough.
 
@@ -245,9 +243,6 @@ axs[1].set_title(r'$\exp{(-\beta x)}$')
 axs[1].legend();
 #+END_SRC
 
-#+RESULTS: prob-gamma-components
-[[file:./.ob-jupyter/319aa3e48a825e567e7c63b0e68bdd3210ce6872.png]]
-
 When $\alpha < 1$, the geometric function is strictly decreasing, when $\alpha > 1$ it's strictly increasing; and for the exponential function, since it's actually a negative exponential function, it's always decreasing. The result of the interaction between the two functions, is that when $\alpha < 1$ the density is always decreasing and when $\alpha > 1$, it increases first and then starts decreasing. The value of $\beta$ only changes the rate of change but not the overall shape of the distribution.
 
 First let's fix $\beta$ and see how $\alpha$ affects the shape of the density.
@@ -267,9 +262,6 @@ for i, alpha in enumerate(alphas):
     plt.xticks([0, 5, 10])
     plt.tight_layout();
 #+END_SRC
-
-#+RESULTS: prob-gamma-alpha
-[[file:./.ob-jupyter/80083ecd858be97cb520fd66d7b81b26fd431aee.png]]
 
 As we can see, increasing $\alpha$ gradually move the density towards the right. And this is why $\alpha$ is called the shape parameter: it modifies the shape of the density function.
 
@@ -296,9 +288,6 @@ for i, beta in enumerate(betas):
     plt.xticks([0, 5, 10, 20])
     plt.tight_layout()
 #+END_SRC
-
-#+RESULTS: prob-gamma-beta
-[[file:./.ob-jupyter/da4dfaf42c9ea90d5ed51f8892681df9f5722dde.png]]
 
 So $\beta$ doesn't change the overall shape of the density function, it just stretches the density so it distributes the probability to wider areas. By the way that's why the parameter is called a "scale" parameter, because it scales the density function. It's inverse, $\theta$, is called the rate parameter.
 
@@ -334,9 +323,6 @@ for i, beta in enumerate(betas):
     plt.tight_layout();
 #+END_SRC
 
-#+RESULTS: prob-exponential
-[[file:./.ob-jupyter/d3966c1d8501b2f112248d9cf12ad719b57d014a.png]]
-
 As we can see, scaling the distribution spreads the probability mass to wider regions, just like before.
 
 There is another special case Gamma distribution, the Chi-squared distribution, that is one of the most important distributions in frequentist statistics, but we won't talk about it here.
@@ -366,9 +352,6 @@ for i, lbd in enumerate(lbds):
     plt.xticks([0, 5, 10, 20])
     plt.tight_layout()
 #+END_SRC
-
-#+RESULTS: prob-poisson
-[[file:./.ob-jupyter/59dc2da23717c17b5ca70fd2f1a5a8138e0323d7.png]]
 
 Because the same parameter $\lambda$ determines both the mean and the variance of the distribution, we can see that as $\lambda$ grows the probability density is pushed more and more to the right while the variance also keeps increasing. Using one parameter to control both the mean and the variance makes the probability mass function formulation simple, but it also makes its application complicated since if the mean of the quantity we are modelling does not match the variance the distribution will become totally unusable. We'll come back to this problem later.
 
@@ -420,9 +403,6 @@ handles, labels = axs[2].get_legend_handles_labels()
 fig.legend(handles, labels, loc='center');
 #+END_SRC
 
-#+RESULTS: prob-normal-components
-[[file:./.ob-jupyter/e38f535fecdb4c3e4283ca3f8f37e7246bc89b2b.png]]
-
 From the left plot we see that the negative square function is symmetric around $\mu$, where it takes its maximum value $0$, and it can take on huge negative values when $x$ is far away from it. However, in the middle plot, we can see that when $x\lt-5$, the exponential function is almost unresponsive to the input because the output is always close to zero. The combined effect of the two, as shown in the right plot, is that the density is very high around the mean, and it rapidly decreases when the input moves away from the mean. This combined effect guarantees that once the mean is decided, the majority of the probability mass will be around the mean, while the level of concentration will be determined by $\sigma$. This is why we often see the adult hights or students' scores being modeled with the Normal distribution, even though we know perfectly well that their values will only appear on a very small region of the real line. We don't have to worry because the probabilition distribution scheme of the Normal distribution determines that we'll never wander very far from the mean, and this, let's be clear, is thanks to the shape of the exponential function.
 
 As is already customary now, let's look at how the parameter values affect the shape of the density function. First $\mu$.
@@ -445,9 +425,6 @@ for i, mu in enumerate(mus):
     plt.tight_layout();
 #+END_SRC
 
-#+RESULTS: prob-normal-mu
-[[file:./.ob-jupyter/3ec562ebdc01c54f7f46570b41bbac3db8641c92.png]]
-
 Changing the mean does not change the shape of the distribution at all, it just moves the whole density function around the real line. Let's also look at $\sigma$.
 
 #+name: prob-normal-sigma
@@ -466,9 +443,6 @@ for i, sigma in enumerate(sigmas):
     plt.xticks([-10, -5, 0, 5, 10])
     plt.tight_layout();
 #+END_SRC
-
-#+RESULTS: prob-normal-sigma
-[[file:./.ob-jupyter/21dae2b6eb42c8486a45650ed198bfb1ed3e5650.png]]
 
 
 This time, changing $\sigma$ does not seem to change the mean value at all, it just spreads the probabilition more widely when $\sigma$ gets bigger. So the effect of $\mu$ and $\sigma$ are completely separated: the mean determines where the density will concentrate on while the standard deviation determines how much the probability spreads around it.
@@ -513,9 +487,6 @@ handles, labels = axs[2].get_legend_handles_labels()
 fig.legend(handles, labels, loc='center');
 #+END_SRC
 
-#+RESULTS: prob-laplace-components
-[[file:./.ob-jupyter/bf5d089d27ab646230a808172ae042fd88c00bfe.png]]
-
 We can clearly see where the difference is from. Both the functions being exponentiated are negative and symmetric around the mean, but in the Laplace case the function is linear while in the Normal case it's square. This causes the function is the Normal case to change more slowly around the mean and more rapidly when it's further away from the mean. Consequently, after passing through the exponential function, the resulting density function of the Normal distribution allocates more probability mass around the mean, but quickly reduces to close to zero when it's far away. The oppositive is true for the Laplace density function, it allocates less probability mass around the mean but when we moves away from the mean, it also decays alower.
 
 This special property of the Laplace distribution makes it very helpful in certain circumstances, because it's exactly the oppositive of the Normal distribution. In practical statistical modelling the distribution is very often used to induce extreme behaviours: when the value is close to the mean we are much more likely to get the mean because the probability density is much smaller compared to the mean,but values far away from the mean are also acceptable because there are also considerable probability mass allocated to those regions.
@@ -538,9 +509,6 @@ for i, b in enumerate(bs):
     plt.xticks([-10, -5, 0, 5, 10])
     plt.tight_layout();
 #+END_SRC
-
-#+RESULTS: prob-laplace-densities
-[[file:./.ob-jupyter/3747074d3c501a19cc66309cbec55f7aeaf4299c.png]]
 
 And, just in case you haven't notice it, the density function of the Laplace distribution is also a negative exponential function like the Exponential distribution, but with an extra absolute function so it's symmetrical around the mean. For this reason the Laplace distribution is also known as the Double Exponential distribution.
 
@@ -582,9 +550,6 @@ axs[2].plot(x, gamma**2 / ((x-x0)**2 + gamma**2), 'k-')
 axs[2].set_title(r'Cauchy density');
 #+END_SRC
 
-#+RESULTS: prob-cauchy-components
-[[file:./.ob-jupyter/931278c6790dd7f9de71b96b7fb99a37dae25720.png]]
-
 The density function is symmetric: this is quite understandable since the square function is symmetric. On each side of the center, as we move away from $x=x_0$, the square function on the left increases, the fraction function on the middle decreases, which leads to the decreasing density when we move away from the center, as shown in the right plot.
 
 So where are the heavy tails coming from? Well clearly it's not from the square function because we are already using something similiar in the Normal distribution. If we compare the fraction function in the middle plot with the negative exponential functions we have seen before, we can clearly see that this function decreases as the exponential does, but at a much lower rate. In fact even in common language we use the word "exponential" quite often, to indicate how things change quickly, so it's understandable that the fraction function here doesn't change as fast as the exponential function. In any case this sluggish change means that even if we have moved fairly far away from the center, the density function would still be able to assign considerable probability mass in its vicinity. And this, is how we have succeeded in obtaining our heavy tail Cauchy distribution.
@@ -607,9 +572,6 @@ for i, b in enumerate(bs):
     plt.xticks([-10, -5, 0, 5, 10])
     plt.tight_layout();
 #+END_SRC
-
-#+RESULTS: prob-cauchy-densities
-[[file:./.ob-jupyter/a8734fc48b326adc9fec6deceb27c7a13207522b.png]]
 
 Just as we suspected, scaling (i.e. increasing the scale parameter) spreads the probability mass to wider regions but it have no effect on the center of the distribution.
 
@@ -666,9 +628,6 @@ plt.title('Compare Normal and Half Normal distribution')
 plt.tight_layout();
 #+END_SRC
 
-#+RESULTS: prob-half-normal
-[[file:./.ob-jupyter/e79ea18b3b121c1d5e2c60e3f686534e3507d19c.png]]
-
 
 Before normalisation, the Half Normal distribution is, just as the name indicates, half of the Normal distribution. However since the probability mass for any probability distribution should sum to 1, we simply double the probability density at each point.
 
@@ -694,9 +653,6 @@ plt.legend()
 plt.title('Compare Cauchy and Half Cauchy distribution')
 plt.tight_layout();
 #+END_SRC
-
-#+RESULTS: prob-half-cauchy
-[[file:./.ob-jupyter/9261b5c1d61cb1e776c0d3f3bc040ab5922c2f00.png]]
 
 Just like the Normal case, only with heavier tails, as is characteristic of the Cauchy distribution.
 
@@ -746,9 +702,6 @@ plt.title('Loc-Scale transformation of Normal distribution')
 plt.legend();
 #+END_SRC
 
-#+RESULTS: prob-loc-scale
-[[file:./.ob-jupyter/ae309ffc522782432422128e9fb7fdba080e42df.png]]
-
 The loc-scale transformation is very widely used on the Normal distribution, and considering how omnipresent the Normal distribution is in statistics, it's also one of the most commonly used transformation everywhere. This transformation is helpful because very often we want more than just modelling an unknown quantity with the Normal distribution; since we are also unsure about the mean and standard deviation of this quantity, we might want to model them as well. The location-scale transformation let us model them separately, and thus reduce the cognitive load for us and the computational load for the computers.
 
 However we can't simply apply this transformation to whatever distribution we like: the distribution should first be defined by meaningful location and scale parameters. Besides there is something particular about the Normal distribution that makes this transformation especially useful, and that is the total separation between the mean and the variance. With the Normal distribution the $\mu$ parameter controls the mean, the $\sigma$ parameter controls the variance, and the two function separately without interfering with each other. This is a rare property of the Normal distribution that many other distributions don't have.
@@ -789,9 +742,6 @@ plt.xticks([0, 5, 10, 15])
 plt.tight_layout();
 #+END_SRC
 
-#+RESULTS: prob-loc-scale-wrong
-[[file:./.ob-jupyter/1c791e25f0595fafbddfa4275b50e36d60d9956d.png]]
-
 *** Exponential transformation
 
 We said in the previous section that it's important to understand how a distribution is constructed, so that we can know what further transformations are availabe to us. However this caution is only necessary if we want to maintain in the same family of distributions. In some other scenarios, if we just want to transform one distribution defined on one space to another distribution on a target space, without worrying about what the ending result is like, then this caution is not totally necessary. For example, if we simply want to transform a distribution defined on $\mathbb{R}$ to another one defined on $\mathbb{R}^+$, we can pass the original quantity through the exponential function without worrying about what the result distribution will be like, we are certain that the resulting distribution will have support on $\mathbb{R}^+$. This is simply the property of the exponential function.
@@ -819,9 +769,6 @@ axes[1].set_xticks([0, 5, 10, 15, 20])
 
 plt.tight_layout();
 #+END_SRC
-
-#+RESULTS: prob-transform-exp
-[[file:./.ob-jupyter/fd45d60a0e99963bf4a2ed6808b85c78ad417501.png]]
 
 In this case we do know what the resulting distribution is: it's the LogNormal distribution, which is defined exactly as the exponential of a Normal distribution. However in general the resulting distribution doesn't have to correspond to any known distribution: this is where we can make use of our creativity, and where we need to assume the responsibility of being a responsible modeler.
 
@@ -858,9 +805,6 @@ x = torch.arange(-5, 5, step=0.01)
 axes[1].plot(x, x.exp(), 'k-');
 #+END_SRC
 
-#+RESULTS: prob-transform-exp2
-[[file:./.ob-jupyter/b5d1548f979e8ee7db6661b9e8c54212db8af618.png]]
-
 After the transformation, the bulk of the probability mass has moved from the center of the real line to the left margin of the positive real line. The saturation of the black lines indicates the concentration of the samples.
 
 +The Standard Normal distribution is of course centered around zero, but the exponential function is certainly not. We can see that all the negative samples in the Normal distribution are squeezed into the $[0, 1]$ region of the resulting LogNormal distribution, and when the quantity is positive, the resulting quantity is stretched to wider and wider regions, because the exponential function is growing faster and faster. This reminds us that probability transformations also distort the distributions, and this distortion consequently affects the property of the new distribution.+
@@ -878,9 +822,6 @@ x = torch.arange(-5, 5, step=0.01)
 plt.plot(x, x.exp() / (1 + x.exp()), 'k')
 plt.title('The Logistic function');
 #+END_SRC
-
-#+RESULTS:
-[[file:./.ob-jupyter/5551a2c94dbbc7acbbf157b17ae7f259cc299c6c.png]]
 
 We can see that the function is symmetric around zero, responsive around $[-4, 4]$, and gradually become less and less responsive when the absolute value is bigger than four. We transforming a distribution we obviously want the resulting distribution to be responsive to the inputs, so we should be attentive where the input values concentrate on.
 
@@ -904,9 +845,6 @@ axes[1].set_title('Logistic transformed distribution')
 
 plt.tight_layout();
 #+END_SRC
-
-#+RESULTS: prob-transform-logistic
-[[file:./.ob-jupyter/99ae7f8e18a6b83d02ea7e867574e2dacfd15de3.png]]
 
 One striking thing we'd immediately notice is that there are many values close to 0 and 1. This is because in the Cauchy distribution we have many values with absolute values greater than 4, since the logistic function is not responsive to these inputs, all of them are squeezed together after the transformation. It's easier to spot the problem if we colourise the samples:
 
@@ -938,9 +876,6 @@ axes[0].set_xticks([-8, -4, -1, 4, 8])
 x = torch.arange(-5, 5, step=0.01)
 axes[1].plot(x, x.exp() / (1 + x.exp()), 'k');
 #+END_SRC
-
-#+RESULTS:
-[[file:./.ob-jupyter/a17960195a6826e03c0283a4aed1e4e9b8eb79a2.png]]
 
 In this plot we can more clearly see how the transformation distorts the original space. Almost everything left of $-4$ is squeezed to zero, while everything larger than $4$ is pushed to one. The middele regions are more equally spreaded but the distortion is also clearly visible. This reminds us that if we want to use the logistic transformation, we probably should first make sure that the original quantity is right in the middle of the real line, between $-4$ and $4$. Once beyond, the resulting distribution will stop responding to the input and we are unlikely to learn anything from it. (This, coincidently, is why we have the vanishing gradients problem in many deep learning models.)
 
