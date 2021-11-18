@@ -91,19 +91,19 @@ In the rest of the book we'll encounter many different distributions; each time 
 
 ** The genesis
 
-If we just have a given probability space, and a corresponding sigma algebra where we want to define a distribution, and we want the probability distribution to be as uniform as possible, the first choice, obviously, is the uniform distribution: no matter what the space is and how many points it contains, just assign each point set (a set containing one and only one point) the same probability value. However this is neither very practical nor very useful: if we want every point to have the same probability we wouldn't even need to define the probability in the first place! So instead we'll usually also enforce some extra requirements, like the average value of the distribution, or its variation across the whole space, or some other related quantities derived thereof, and we then contrive a scheme so that we can maximise the uniformity while at the same time preserving these requirements. This "uniformity" in probabilities are measured by something called the entropy, which is why these distributions are called maximum entropy distributions.
+If we only have a given probability space and a corresponding sigma algebra, and we want the probability distribution to be as uniform as possible, the first choice, obviously, is the uniform distribution: no matter what the space is and how many points it contains, just assign each point set (a set containing one and only one point) the same probability value. However this is neither very practical nor very useful: if we want every point to have the same probability we wouldn't even need to define the probability in the first place! So instead we'll usually also enforce some extra requirements, like the average value of the distribution, or its variation across the whole space, or some other related quantities derived thereof, and we then contrive a scheme so that we can maximise the uniformity while at the same time meeting these requirements. This "uniformity" in probabilities are measured by something called the entropy, which is why these distributions are called maximum entropy distributions.
 
-Depending on whether the probability space is discrete or continuous, we also give the schemes for probability assignments different names: probability mass functions if the space is discrete, and probability density functions if continuous. Undoubtedly you have heard of these names somewhere already.
+Depending on whether the probability space is discrete or continuous, we also give the schemes for probability assignments different names: probability mass functions if the space is discrete, and probability density functions if continuous. Undoubtedly you have heard of these names somewhere already. We'll also encounter probabilities that are both continuous and discrete, but we'll deal with them when we need to.
 
-In this section we'll cover several maximum entropy distributions, which also happen to be the most widely used distributions in all probabilistic modelling. There are mainly two reasons for their popularity: they are mathematically simple and elegant, so they tend to be our first choices in modelling; they are able to describe the outcomes of many complex processes in real data problems, even when we know little about these complex processes, so they also tend to be our last choices.
+In this section we'll cover several maximum entropy distributions, which also happen to be the most widely used distributions in all probabilistic modelling. There are many reasons for their popularity: they are mathematically simple, so they tend to be our first choices in modelling; they are able to describe the outcomes of many complex processes in real data problems, even when we know little about these complex processes, so they also tend to be our last choices. And besides, many of them are designed to work well with each other, that's why we'll also introduce them together.
 
 *** Bernoulli distribution
 
-Let's start with the Bernoulli distribution. We literally can not find any distribution simpler than the Bernoulli: it has only two possible outcomes, and one less will make it certainty, not probability. We assign probability $p$ ($0 \leq p \leq 1$) to one of the outcomes and $(1-p)$ to the other, and if we take the possible outcomes $b$ to be $0$ and $1$ (remember that this choice is completely random and in no way affects the actual distirbution assignment), the probability mass distribution can be written as
+Let's start with the Bernoulli distribution. We can hardly find any distribution simpler than the Bernoulli: it has only two possible outcomes, and one less will make it certainty, not probability. We assign probability $p$ ($0 \leq p \leq 1$) to one of the outcomes and $(1-p)$ to the other, and if we take the possible outcomes $b$ to be $0$ and $1$ (remember that this choice is completely random and in no way affects the actual distribution assignment), the probability mass distribution can be written as
 
 $$ \text{Bern}(b=1) = p, \text{Bern}(b=0)=1-p,$$
 
-or in more succcint terms
+or in more succinct terms
 
 $$ \text{Bern}(b; p) = p^b (1-p)^{1-b}.$$
 
@@ -113,30 +113,30 @@ The mean and variance of the Bernoulli distribution are also easy to compute
 
 \begin{align*}
 \mathbb{E}(b) &= p \\
-\mathbb{V}(b) &= p(1-p)
+\mathbb{V}(b) &= p(1-p).
 \end{align*}
 
 *** Beta distribution
 
 The Bernoulli distribution looks so simple that we didn't even bother to give any example. But think for a moment: we have assigned one outcome with probability $p$ and the other $(1-p)$, but where is this mysterious $p$ from? One day, you get up in the morning, you draw up the curtains, you see the clouds pressing on the window, and you wonder whether it's going to rain. Since you are not sure, you decide to assign it a probability, and this is where we need the Bernoulli distribution. However, not only you don't know whether it's going to rain, you also don't know how likely it's going to rain. That is, not only we don't know the $b$ in $\text{Bern}(b; p)$, we also don't know $p$. Unlike $b$, which can only take two values, $p$ can be anything between $0$ and $1$. One probability distribution for such a space is the Beta distribution and since this space is continuous, the probability assignment is given by the probability density function.
 
-The density for Beta distribuiton can be written as
+The density for Beta distribution can be written as
 
 $$\text{Beta}(p) \propto p^{a-1} (1-p)^{b-1}. $$
 
-$a$ and $b$ are called the shape parameters and they can be any positive value, and the $\propto$ reads "proportional to" and it simply means that I've taken the liberty to remove some clutter from the expression so that we can concentrate on things that matter. One day you might be interested in knowing what I have removed and it's alright, because the internet is just a few clicks away. we'll commit some similiar atrocities to some other distributions in the following text.
+$a$ and $b$ are called the shape parameters and they can be any positive value, and the $\propto$ reads "proportional to" and it simply means that I've taken the liberty to remove some clutter from the density function so that we can concentrate on things that matter. One day you might be interested in knowing what I have removed and it's alright, because the internet is just a few clicks away. Later we'll commit some similar atrocities to some other distributions.
 
-But for now, compare the density function of Beta with that of Bernoulli, you might be amazed to see how much they resemble each other. It turns out that the resemblence is intentional, and the intention is to make computation easier. Just looking at their expressions and we almost can't stop the urge to multiply them together. This conspiracy is called conjugacy, we won't touch on it much in this book but it used to be a great deal in Bayesian statistics.
+But for now, compare the density function of Beta with that of Bernoulli, you might be amazed to see how much they resemble each other. It turns out that the resemblance is intentional, and the intention is to make computation easier. Just looking at their expressions and we almost can't stop the urge to multiply them together. This conspiracy is called conjugacy, we won't touch on it much in this book but it used to be a great deal in Bayesian statistics.
 
-There is a more general lesson to be learned here. In statistics, and more generally in all mathematics, everything is invented, for certain purposes, so when some formula is given to us, it's always a good idea to ask why they take the form as they are, and what purpose it serves.
+There is a more general lesson to be learned here. In statistics, and more generally in all of mathematics, there is nothing "natural", and everything is invented, for certain purposes. So when some formula is given to us, it's always a good idea to ask why they take the form as they are, and what purpose it serves.
 
-One thing we might consider, when choosing probability distributions, is the shape of the probability density function, because it determines how much probability mass will be distributed to each area of the space. Look at the Beta density function, what shape do you think it will take? Let's take a closer look at the density function to see if we can find anything interesting.
+One thing we might consider, when choosing probability distributions, is the shape of the probability density function, because it determines how much probability mass will be distributed to each area of the space. Depending on what we know about the quantity we are modelling, we can choose different parameters, so that the shape of the density matches better our knowledge about it. Look at the Beta density function, what shape do you think it will take? Let's take a closer look at the density function to see if we can find anything interesting.
 
-The first thing we'll notice, is that the density function is the product of two functions, $p^{a-1}$ and $(1-p)^{b-1}$, both are exponential functions, but since they have different signs ($p$ and $-p$), they will probably move in opposite directions.
+The first thing we'd probably notice, is that the density function is the product of two functions, $p^{a-1}$ and $(1-p)^{b-1}$, both are exponential functions, but since they have different signs ($p$ and $-p$), they will probably move in opposite directions.
 
-And, from our knowledge of exponential functions, we know that the functions have different behaviour when the exponential term is negative, smaller than one, and larger than one, which corresponds to $a$ and $b$ taking values smaller than 1, smaller than 2, and bigger than 2, respectively.
+And, we know that the exponential functions have different behaviours when the exponential term is negative, smaller than one, and larger than one, which corresponds to $a$ and $b$ taking values smaller than 1, smaller than 2, and bigger than 2, respectively.
 
-Let's plot the two functions separately, with different parameter values, to observe the function behavious under different conditions.
+Let's plot the two functions separately, with different parameter values, to observe the function behaviours under different conditions.
 
 #+name: prob-beta-components
 #+BEGIN_SRC python
@@ -159,21 +159,22 @@ axs[1].legend();
 #+END_SRC
 
 Because the plots on the left are about $p$ while those on the right are about $1-p$ it's understandable they have opposite shapes.
-From the left plot, and together with a little knowledge about the exponential function, we see that
+From the left plot we see that
 
-- when $k<1$, the function is concave and decreases,
-- when $1< k<2$, the function is convex and increases,
-- when $k > 2$, the function is concave and increases.
+- when $k<1$, the function is concave and decreases monotonously,
+- when $1< k<2$, the function is convex and increases monotonously,
+- when $k > 2$, the function is concave and increases monotonously,
+- and the reverse is true for the plots on the right.
 
-The reverse is true for the plots on the right.
-And now we can understand the shape of the Beta density functions, which are products of the two.
+Now it will be easier to understand the shape of the Beta density functions, which are products of the two.
 
 #+name: prob-beta-densities
 #+BEGIN_SRC python
-fig, axs = plt.subplots(2, 3, figsize=(9, 6), sharex=True)
+fig, axs = plt.subplots(2, 4, figsize=(9, 6), sharex=True, sharey=True)
 axs = axs.flat
 
-thetas = [(0.8, 0.8), (0.8, 1.6), (1.6, 4.8), (4.8, 4.8), (1.6, 0.8), (4.8, 1.6)]
+thetas = [(0.8, 0.8), (0.8, 1.6), (1.6, 4.8), (0.8, 4.8),
+          (4.8, 4.8), (1.6, 0.8), (4.8, 1.6), (4.8, 0.8)]
 
 for i, (a, b) in enumerate(thetas):
     d = dist.Beta(a, b)
@@ -184,18 +185,14 @@ for i, (a, b) in enumerate(thetas):
     plt.tight_layout()
 #+END_SRC
 
-From first impression we can already see that the density function is capable of taking many quite different shapes, even though the two components seem innocent enough.
+From first impression we can already see that the density function is capable of taking many quite different shapes, even though the two components seem innocently simple:
 
-- The upper left plot, where $a<1, b<1$, is the product of the two green plots in the previous plot, the density is higher at the two extremes and lower in the middle
-- The bottom left plot, where $a>1, b>1$, is the product of the two orange plots, the density is higher at the middle and lower at the two extremes.
-- The upper middle plot, where $a<1, b>1$, is the product of the green on the left and orange on the right, so naturally it's monotonously decreasing
-- The lower middle plot, where $a>1, b<1$, is the opposite
-- The upper right plot, where $a>1, b>1$, is the product of the two green plots in the previous plot, the density is higher at the two extremes and lower in the middle
-- And although the two component functions and monotone, and product increases first and then decreases.
-- The upper right plot, where $a\lt1, b\gt1$, is the product of two decreasing functions, the result is naturally a monotone decreasing function.
-- And further more, the exact values of $a$ and $b$ will determine how much the density increases before it starts decreasing.
-- The lower right is the opposite.
-
+- in the first column, the upper plot has both parameters smaller than 1, the density concentrates on the two extremities; the lower plot has both parameters bigger than two and the density concentrates in the centre;
+- in the second column, with one parameter bigger than 2 and the other smaller than 1, the density concentrates on one extreme;
+- in the third column, with one parameter bigger than 2 and the other between 1 and 2, the density concentrates on somewhere in the middle;
+- in the last column, with one parameter bigger than 2 and the other smaller than 1, the density concentrates on one extreme, and it decreases rapidly when we move away from it;
+- finally, increasing the first parameter tends to move the density to the right extreme, while increasing the second moves it to the left, and the end result is a balance of the two.
+  
 Studying the parameters and their effects on the density function can help us understand how the density functions are formed, and it also helps us to choose the right parameter values when we want a density function of a specific shape.
 
 The mean and variance of the Beta distribution are
@@ -210,7 +207,7 @@ It's a bit complex so let's remind ourselves the most important facts about them
 - the mean is a compromise between $a$ and $b$,
 - the variance is always smaller than the mean.
 
-We have seen two probability distributions, and for both of them the variance is smaller than the mean. Is this a general rule? Well it's not, in the future we'll see many different distributions where the variance is equal to or greater than the mean. The lesson here, is that because these maximum entropy distributions are chosen for some of their properties, it's also important to check the others when we use these distribution to model some specific quantity.
+We have seen two probability distributions, and for both of them the variance is smaller than the mean. Is this a general rule? Well it's not, in the future we'll meet many different distributions where the variance is equal to or greater than the mean. The lesson here, is that because these maximum entropy distributions are chosen for some of their properties, it's also important to check the others when we use these distribution to model some specific quantity.
 
 *** Gamma distribution
 
@@ -1279,3 +1276,5 @@ to another mode.
 ** Some other sampling methods
 
 ** Closing thought
+
+#  LocalWords:  conjugacy
