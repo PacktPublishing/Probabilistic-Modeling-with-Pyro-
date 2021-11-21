@@ -211,11 +211,11 @@ We have seen two probability distributions, and for both of them the variance is
 
 *** Gamma distribution
 
-Sometimes life just feels like an endless struggle. We started with the Bernoulli distribution because all we want is an answer of yes or no, then we discovered that since we can not be sure, we have to think about the possibility of being yes or no, which is another quantity that can take any value between $0$ and $1$, and which we have patiently assigned a Beta distribution on. Then, to our utter exasperation, the Beta distribution itself have two more parameters and they can take on any values greater than 0. Does the struggle have no end?
+Sometimes life just feels like an endless struggle. We started with the Bernoulli distribution because all we want is an simple answer of yes or no, then we discovered that since we can not be sure of the yes or no, we have to think about the possibility of being each, which is another quantity that can take any value between $0$ and $1$, and to which we have patiently assigned a Beta distribution. Then, to our utter exasperation, the Beta distribution itself have two more parameters and they can take on any values greater than 0. Does the struggle have no end?
 
 I'm afraid the answer is: no, to live is to suffer, and there is no end. But lucky for us, both the parameters for the Beta distribution, $a$ and $b$, have the some domain, $\mathbb{R}^+$, and we can thus put the same distribution on them.
 
-A popular choice of probability distributions on this domain is the Gamma distribution, which itself has two parameters, the shape parameter $\alpha$ and the scale parameter $\beta$. Lucky for us, like $a$ and $b$ for the Beta distribution, $\alpha$ and $\beta$ have the same domain as them, $\mathbb{R}^+$, so even if the worse has come to the worst and we also have to model $\alpha$ and $\beta$, we can just keep using the Gamma distribution. The density function for Gamma distribution is
+A popular choice of probability densities on this domain is the Gamma probability density function, which itself has two parameters, the shape parameter $\alpha$ and the scale parameter $\beta$. Luckily like $a$ and $b$ for the Beta distribution, the parameters $\alpha$ and $\beta$ of the Gamma density function have the same domain, $\mathbb{R}^+$, so even if we also have to model $\alpha$ and $\beta$, at least we have all the ground covered. The density function for Gamma distribution is
 
 $$\text{Gamma}(x; \alpha, \beta) \propto x^{\alpha-1} e^{-\beta x}. $$
 
@@ -240,9 +240,9 @@ axs[1].set_title(r'$\exp{(-\beta x)}$')
 axs[1].legend();
 #+END_SRC
 
-When $\alpha < 1$, the geometric function is strictly decreasing, when $\alpha > 1$ it's strictly increasing; and for the exponential function, since it's actually a negative exponential function, it's always decreasing. The result of the interaction between the two functions, is that when $\alpha < 1$ the density is always decreasing and when $\alpha > 1$, it increases first and then starts decreasing. The value of $\beta$ only changes the rate of change but not the overall shape of the distribution.
+The geometric function is strictly decreasing when $\alpha < 1$ and strictly increasing when $\alpha > 1$, the negative exponential function is always decreasing for any $\beta > 0$. Combining the two, the density is always decreasing when $\alpha < 1$ and when $\alpha > 1$, it increases first and then starts decreasing. $\beta$ only affects the rate of change but not the overall shape of the distribution.
 
-First let's fix $\beta$ and see how $\alpha$ affects the shape of the density.
+First let's fix $\beta$ and see how $\alpha$ affects the density.
 
 #+name: prob-gamma-alpha
 #+BEGIN_SRC python
@@ -260,7 +260,7 @@ for i, alpha in enumerate(alphas):
     plt.tight_layout();
 #+END_SRC
 
-As we can see, increasing $\alpha$ gradually move the density towards the right. And this is why $\alpha$ is called the shape parameter: it modifies the shape of the density function.
+As we can see, increasing $\alpha$ gradually move the density towards the right: this is why $\alpha$ is called the shape parameter, it modifies the shape of the density function.
 
 Now let's fix $\alpha$ and see how changing $\beta$ will change the shape of the density. It turns out that in PyTorch, and consequentially also in Pyro, the Gamma distribution is not parameterised with the scale parameter $\beta$, but with another rate parameter $\theta$. Fortunately there is a very simple relation between the two:
 
@@ -295,13 +295,13 @@ The mean and variance of the Gamma distribution are
 \mathbb{V}(p) &= \frac{\alpha}{\beta^2}
 \end{align*}
 
-Depending on whether $\beta$ is greater or smaller than 1, the variance can be samller or greater than the mean, so the Gamma distribution can be quite flexible in its shape. We like this, because this means that we can use the distribution in many different circumstances.
+Depending on whether $\beta$ is greater or smaller than 1, the variance can be samller or greater than the mean, so the Gamma density function can be quite flexible in its shape. We like this, because this means that we can use the distribution in many different circumstances.
 
 **** Exponential distribution
 
-There are some special case Gamma distributions that are widely used in practice, here we'll mention one of them in passing, because we want to use it later.
+There are some special case Gamma distributions that are widely used in practice, here we'll mention one of them in passing because we need it later.
 
-The Gamma distribution is also called the exponential distribution when $\alpha = 1$. We can understand why it's called exponential, because with $\alpha=1$ the geometric part of the Gamma density disppears and we only have the exponential left. We can also guess the shape of the density function, because we have already plotted it when we were trying to understand the shape of the Gamma density function. It's also quite easy to get its mean and variance.
+The Gamma distribution is also called the exponential distribution when $\alpha = 1$. We can understand why: with $\alpha=1$ the geometric part of the Gamma density disppears and we only have the exponential left. We can also guess the shape of the density function, because we have already plotted it when we were trying to understand the shape of the Gamma density function. It's also quite easy to get its mean and variance.
 
 #+name: prob-exponential
 #+BEGIN_SRC python
